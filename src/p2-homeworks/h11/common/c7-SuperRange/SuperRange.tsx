@@ -1,5 +1,6 @@
 import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes} from 'react'
 import s from './SuperRange.module.css'
+import {makeStyles, Slider, Typography} from "@material-ui/core";
 
 // тип пропсов обычного инпута
 type DefaultInputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
@@ -8,36 +9,46 @@ type DefaultInputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElem
 // (чтоб не писать value: string, onChange: ...; они уже все описаны в DefaultInputPropsType)
 type SuperRangePropsType = DefaultInputPropsType & { // и + ещё пропсы которых нет в стандартном инпуте
     onChangeRange?: (value: number) => void
+    value?: number
 };
+
+const useStyles = makeStyles({
+    root: {
+        width: 300,
+        paddingLeft:200
+    },
+});
 
 const SuperRange: React.FC<SuperRangePropsType> = (
     {
         type, // достаём и игнорируем чтоб нельзя было задать другой тип инпута
         onChange, onChangeRange,
         className,
-
+        value,
         ...restProps// все остальные пропсы попадут в объект restProps
     }
 ) => {
-    const onChangeCallback = (e: ChangeEvent<HTMLInputElement>) => {
-        onChange && onChange(e) // сохраняем старую функциональность
+    const classes = useStyles();
 
-        onChangeRange && onChangeRange(+e.currentTarget.value)
+    const handleChange = (event: any, newValue: number | number[]) =>{
+        onChangeRange && onChangeRange(newValue as number)
+
     }
 
-    const finalRangeClassName = `${s.range} ${className ? className : ''}`
-
     return (
-        <>
-            <input
-                type={'range'}
-                onChange={onChangeCallback}
-                className={finalRangeClassName}
-
-                {...restProps} // отдаём инпуту остальные пропсы если они есть (value например там внутри)
+        <div className={classes.root}>
+            <Typography id="range-slider" gutterBottom>
+                Super Range
+            </Typography>
+            <Slider
+                value={value}
+                onChange={handleChange}
+                valueLabelDisplay="auto"
+                aria-labelledby="range-slider"
             />
-        </>
+        </div>
     )
+
 }
 
 export default SuperRange

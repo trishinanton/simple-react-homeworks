@@ -1,33 +1,38 @@
-import React, {useState} from 'react'
-import { Slider, Typography} from "@material-ui/core";
+import React from 'react'
+import {makeStyles, Slider, Typography} from "@material-ui/core";
 
 type SuperDoubleRangePropsType = {
     onChangeRange?: (value: [number, number]) => void
-    value: number[]
+    value?: [number, number]
     // min, max, step, disable, ...
 }
-
+const useStyles = makeStyles({
+    root: {
+        width: 300,
+        paddingLeft:200
+    },
+});
 const SuperDoubleRange: React.FC<SuperDoubleRangePropsType> = (
     {
-        onChangeRange, value1,
+        onChangeRange, value,
         // min, max, step, disable, ...
     }
 ) => {
-    const [value, setValue] = React.useState<number[]>([20, 37]);
-    const onChangeCallback = (e: any) => {
-        setValue(e.currentTarget.value)
-        onChangeRange && onChangeRange(e.currentTarget.value)
+    const classes = useStyles();
+
+    const handleChange = (event: any, newValue: number | number[]) =>{
+    onChangeRange && onChangeRange(newValue as [number,number])
 
     }
 
     return (
-        <div>
+        <div className={classes.root}>
             <Typography id="range-slider" gutterBottom>
-                Temperature range
+                Super Double Range
             </Typography>
             <Slider
                 value={value}
-                onChange={onChangeCallback}
+                onChange={handleChange}
                 valueLabelDisplay="auto"
                 aria-labelledby="range-slider"
             />
@@ -36,4 +41,3 @@ const SuperDoubleRange: React.FC<SuperDoubleRangePropsType> = (
 }
 
 export default SuperDoubleRange
-
