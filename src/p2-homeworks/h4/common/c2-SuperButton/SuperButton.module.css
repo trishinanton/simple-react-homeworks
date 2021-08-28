@@ -1,0 +1,15 @@
+.default {
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.default:hover{
+    background-color: aqua;
+    cursor: pointer;
+}
+
+.red {
+    background: red;
+    margin-top: 10px;
+    cursor: pointer;
+
+}
